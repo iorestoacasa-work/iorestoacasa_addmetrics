@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Warning: replacing JVB_OPTS in videobridge config"
-sed -i.bak s/JVB_OPTS=""/JVB_OPTS="--apis=rest,colibri"/g /etc/jitsi/videobridge/config
+sed -i.bak s/JVB_OPTS=\"\"/JVB_OPTS=\"--apis=rest,colibri\"/g /etc/jitsi/videobridge/config
 
 echo "Adding export statistics to sip-communicator properties"
 cat << EOF >> /etc/jitsi/videobridge/sip-communicator.properties
