@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Warning: replacing JVB_OPTS in videobridge config"
-sed -i.bak s/JVB_OPTS=\"\"/JVB_OPTS=\"--apis=rest,colibri\"/g /etc/jitsi/videobridge/config
+sed -i.bak s/JVB_OPTS=\"\"/JVB_OPTS=\"--apis=rest,xmpp\"/g /etc/jitsi/videobridge/config
 
 echo "Adding export statistics to sip-communicator properties"
 cat << EOF >> /etc/jitsi/videobridge/sip-communicator.properties
@@ -11,7 +11,7 @@ org.jitsi.videobridge.STATISTICS_INTERVAL=5000
 EOF
 
 echo "Restarting the videobridge"
-systemctl restart jitsi-videobridge.service
+systemctl restart jitsi-videobridge.service jicofo.service
 
 echo "Installing bottlepy minimal python webserver"
 apt install python-bottle python-requests
