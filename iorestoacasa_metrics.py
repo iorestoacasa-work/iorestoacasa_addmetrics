@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import json
-import requests
+import urllib2
 import os
 
 from bottle import route, run, template
@@ -22,10 +22,10 @@ def prepare_params_tmpl(data):
 
     global PARAMS_TMPL
     if PARAMS_TMPL == "":
-        r = requests.get(URL_REPO_EXPORTER_CONFIG)
+        r = urllib2.urlopen(URL_REPO_EXPORTER_CONFIG)
         # convert data to template
         params_tmpl = ""
-        for line in r.content.split("\n"):
+        for line in r.read().split("\n"):
             if line.startswith("- name:"):
                 param_name = line.split(" ")[2]
                 if param_name in data:
@@ -43,15 +43,15 @@ def iorestoacasa_exporter():
     and presents them in prometheus format
     """
 
-    r = requests.get(URL_JVB_METRICS)
-    if r.status_code == 200:
-        data = r.json()
+    r = urllib2.urlopen(URL_JVB_METRICS)
+    if r.getcode() == 200:
+        data = json.loads(r.read())
         params_tmpl = prepare_params_tmpl(data)
         return params_tmpl % data
 
     else:
         # If error occurs return HTTP response with the error of the original API
-        response = r
-        return r.content
+        response.status = r.getcode()
+        return r.read()
 
 run(host=BIND_IP, port=BIND_PORT)
