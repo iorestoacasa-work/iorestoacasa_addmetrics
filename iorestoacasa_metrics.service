@@ -3,7 +3,7 @@ Description=Io Resto A Casa Jitsi metrics exporter
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python /var/www/iorestoacasa_metrics.py
+ExecStart=/usr/bin/python IORESTOACASA_PLACEHOLDER
 RestartSec=60
 Restart=always
 KillSignal=SIGTERM
