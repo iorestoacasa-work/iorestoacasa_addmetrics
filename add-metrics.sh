@@ -13,8 +13,6 @@ EOF
 echo "Restarting the videobridge"
 systemctl restart jitsi-videobridge.service jicofo.service
 
-echo "Installing bottlepy minimal python webserver"
-apt install python-bottle python-requests
 echo "Allowing firewall on port 8082"
 ufw allow in 8082/tcp
 
