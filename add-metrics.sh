@@ -22,10 +22,10 @@ if [ ! "$?" -eq 0 ]; then
     iptables -I INPUT 1 -j DROP -p tcp --destination-port=8080
     iptables -I INPUT 1 -i lo -j ACCEPT -p tcp --destination-port=8080
 fi
-iptables -L INPUT -n -v | grep 8082 | grep tcp
+iptables -L INPUT -n -v | grep 8081 | grep tcp
 if [ ! "$?" -eq 0 ]; then
-    echo "Allowing firewall on port 8082"
-    iptables -I INPUT 1 -j ACCEPT -p tcp --destination-port=8082
+    echo "Allowing firewall on port 8081"
+    iptables -I INPUT 1 -j ACCEPT -p tcp --destination-port=8081
 fi
 
 echo "Adding systemd service"
