@@ -29,7 +29,7 @@ if [ ! "$?" -eq 0 ]; then
 fi
 
 echo "Adding systemd service"
-sed 's@IORESTOACASA_PLACEHOLDER@$(pwd)/iorestoacasa_metrics.py@g' iorestoacasa_metrics.service > /etc/systemd/system/iorestoacasa_metrics.service
+sed "s@IORESTOACASA_PLACEHOLDER@$(pwd)/iorestoacasa_metrics.py@g" iorestoacasa_metrics.service > /etc/systemd/system/iorestoacasa_metrics.service
 
 echo "Starting to export metrics!"
 systemctl enable iorestoacasa_metrics.service
