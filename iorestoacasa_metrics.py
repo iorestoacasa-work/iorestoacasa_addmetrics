@@ -28,7 +28,7 @@ def iorestoacasa_exporter(url):
         req.close()
         r = ""
         for key, value in data.items():
-            if key in ['conference_sizes', 'current_timestamp', 'graceful_shutdown']:
+            if key in ['conference_sizes', 'current_timestamp', 'graceful_shutdown','conferences_by_audio_senders','conferences_by_video_senders','version']:
                 continue
             r += "jitsi_{} {}\n".format(key, value)
         response.content_type = 'text/plain; charset=utf-8'
