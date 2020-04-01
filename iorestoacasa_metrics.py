@@ -31,6 +31,9 @@ def iorestoacasa_exporter(url):
             if key in ['conference_sizes', 'current_timestamp', 'graceful_shutdown','conferences_by_audio_senders','conferences_by_video_senders','version']:
                 continue
             r += "jitsi_{} {}\n".format(key, value)
+        if 'jitsi_cpu_usage' not in r:
+            cpu_usage = os.popen("top -bn 1 | grep -i '^%CPU' | sed 's/%//g' | awk '{print (100.0-$8)/100 }'").read().strip()
+            r += "jitsi_cpu_usage {}\n".format(cpu_usage)
         response.content_type = 'text/plain; charset=utf-8'
         return r
     except Exception as e:
