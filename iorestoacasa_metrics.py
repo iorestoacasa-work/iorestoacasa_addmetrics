@@ -6,6 +6,9 @@ except ImportError:
 
 import json
 import os
+import multiprocessing
+
+
 
 from bottle import route, run, template
 from bottle import get, request, response
@@ -34,6 +37,7 @@ def iorestoacasa_exporter(url):
         if 'jitsi_cpu_usage' not in r:
             cpu_usage = os.popen("top -bn 1 | grep -i '^%CPU' | sed 's/%//g' | awk '{print (100.0-$8)/100 }'").read().strip()
             r += "jitsi_cpu_usage {}\n".format(cpu_usage)
+        r += "jitsi_{} {}\n".format('cpu_core', multiprocessing.cpu_count())    
         response.content_type = 'text/plain; charset=utf-8'
         return r
     except Exception as e:
