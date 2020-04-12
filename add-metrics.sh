@@ -13,8 +13,28 @@ org.jitsi.videobridge.STATISTICS_INTERVAL=5000
 EOF
 fi
 
-echo "Restarting the videobridge"
-systemctl restart jitsi-videobridge.service jicofo.service
+JvbServiceName="jitsi-videobridge.service"
+Jvb2ServiceName="jitsi-videobridge2.service"
+JicofoServiceName="jicofo.service"
+
+echo "Restarting $JvbServiceName..."
+if systemctl --all --type service | grep -q "$JvbServiceName"; then
+    systemctl restart $JvbServiceName
+    echo "$JvbServiceName restarted."
+else
+    echo "$JvbServiceName not found, re-trying with $Jvb2ServiceName"
+    if systemctl --all --type service | grep -q "$Jvb2ServiceName"; then
+	systemctl restart $Jvb2ServiceName
+	echo "$Jvb2ServiceName restarted."
+    else
+	echo "I found neither $JvbServiceName nor $Jvb2ServiceName."
+	exit 1
+    fi
+fi
+
+echo "Restarting $JicofoServiceName..."
+systemctl restart $JicofoServiceName
+echo "$JicofoServiceName restarted."
 
 iptables -L INPUT -n -v | grep 8080 | grep tcp
 if [ ! "$?" -eq 0 ]; then
