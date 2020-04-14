@@ -5,7 +5,6 @@ except ImportError:
     from urllib2 import urlopen
 
 import json
-import os
 import multiprocessing
 
 from bottle import route, run, response
@@ -15,7 +14,7 @@ BIND_IP = '0.0.0.0'
 BIND_PORT = 8081
 
 
-def is_skippable(key):
+def _is_skippable(key):
     skippable_keys = [
         'conference_sizes',
         'current_timestamp',
@@ -24,6 +23,15 @@ def is_skippable(key):
         'conferences_by_video_senders',
         'version']
     return True if key in skippable_keys else False
+
+
+def _get_cpu_last_minute_avg_load():
+    return float(open('/proc/loadavg').read().split()[0])
+
+
+def _get_cpu_count():
+    return multiprocessing.cpu_count()
+
 
 @route("/<url:re:.+>")
 def iorestoacasa_exporter(url):
@@ -38,19 +46,14 @@ def iorestoacasa_exporter(url):
 
         exported_jitsi_keys = ""
         for key, value in data.items():
-            if is_skippable(key):
+            if _is_skippable(key):
                 continue
             exported_jitsi_keys += "jitsi_{} {}\n".format(key, value)
 
         if 'jitsi_cpu_usage' not in exported_jitsi_keys:
-            cpu_usage = os.popen("""
-                top -bn 1 |
-                grep -i '^%CPU' |
-                sed 's/%//g' |
-                awk '{print (100.0-$8)/100 }'
-            """).read().strip()
-            exported_jitsi_keys += "jitsi_cpu_usage {}\n".format(cpu_usage)
-        exported_jitsi_keys += "jitsi_{} {}\n".format('cpu_core', multiprocessing.cpu_count())
+            exported_jitsi_keys += "jitsi_cpu_usage {}\n".format(
+                _get_cpu_last_minute_avg_load() / _get_cpu_count())
+        exported_jitsi_keys += "jitsi_{} {}\n".format('cpu_core', _get_cpu_count())
         response.content_type = 'text/plain; charset=utf-8'
         return exported_jitsi_keys
     except Exception as e:
