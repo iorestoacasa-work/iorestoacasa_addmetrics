@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 try:
-    from urllib.request import urlopen
+    from urllib.request import urlopen, Request
 except ImportError:
-    from urllib2 import urlopen
+    from urllib2 import urlopen, Request
 
 import json
 import os
@@ -33,8 +33,9 @@ def iorestoacasa_exporter(url):
     """
 
     try:
-        with urlopen(url=URL_JVB_METRICS) as f:
-            data = json.loads(f.read().decode('utf-8'))
+        req = urlopen(Request(url=URL_JVB_METRICS))
+        data = json.loads(req.read().decode('utf-8'))
+        req.close()
 
         exported_jitsi_keys = ""
         for key, value in data.items():
