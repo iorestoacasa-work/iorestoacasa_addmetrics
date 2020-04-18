@@ -33,6 +33,10 @@ def _get_cpu_count():
     return multiprocessing.cpu_count()
 
 
+def _get_cpu_load():
+    return min(_get_cpu_last_minute_avg_load()/_get_cpu_count(), 1)
+
+
 @route("/<url:re:.+>")
 def iorestoacasa_exporter(url):
     """
@@ -51,8 +55,7 @@ def iorestoacasa_exporter(url):
             exported_jitsi_keys += "jitsi_{} {}\n".format(key, value)
 
         if 'jitsi_cpu_usage' not in exported_jitsi_keys:
-            exported_jitsi_keys += "jitsi_cpu_usage {}\n".format(
-                _get_cpu_last_minute_avg_load() / _get_cpu_count())
+            exported_jitsi_keys += "jitsi_cpu_usage {}\n".format(_get_cpu_load())
         exported_jitsi_keys += "jitsi_{} {}\n".format('cpu_core', _get_cpu_count())
         response.content_type = 'text/plain; charset=utf-8'
         return exported_jitsi_keys
