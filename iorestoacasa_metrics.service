@@ -6,6 +6,8 @@ Type=simple
 ExecStart=/usr/bin/python IORESTOACASA_PLACEHOLDER
 # tempo di pausa tra arresto e avvio del servizio
 RestartSec=60
+# blocca il servizio dopo 6 ore che è attivo, anche se senza problemi
+RuntimeMaxSec=21600
 # se bloccato da un timeout o da un errore, lo riavvia, sempre
 Restart=always
 KillSignal=SIGTERM
