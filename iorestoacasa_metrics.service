@@ -4,12 +4,20 @@ Description=Io Resto A Casa Jitsi metrics exporter
 [Service]
 Type=simple
 ExecStart=/usr/bin/python IORESTOACASA_PLACEHOLDER
+# tempo di pausa tra arresto e avvio del servizio
 RestartSec=60
+# se bloccato da un timeout o da un errore, lo riavvia, sempre
 Restart=always
 KillSignal=SIGTERM
 StandardError=syslog
 NotifyAccess=all
 SendSIGKILL=no
+# attiva il controllo della memoria occupata da questo servizio
+MemoryAccounting=true
+# limita la memoria totale a 50Mb (vale solo se MemoryAccounting è attuivo)
+MemoryMax=50M
+# limita il servizio ad un massimo di due processi contemporanei
+LimitNPROC=2
 
 [Install]
 WantedBy=multi-user.target
