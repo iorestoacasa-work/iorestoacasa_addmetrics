@@ -22,7 +22,9 @@ def is_skippable(key):
         'graceful_shutdown',
         'conferences_by_audio_senders',
         'conferences_by_video_senders',
-        'version']
+        'version',
+        'tossedPacketsEnergy'
+    ]
     return True if key in skippable_keys else False
 
 @route("/<url:re:.+>")
