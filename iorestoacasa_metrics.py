@@ -23,7 +23,9 @@ def is_skippable(key):
         'conferences_by_audio_senders',
         'conferences_by_video_senders',
         'version',
-        'tossedPacketsEnergy'
+        'tossedPacketsEnergy',
+        'colibri2',
+        'drain'
     ]
     return True if key in skippable_keys else False
 
