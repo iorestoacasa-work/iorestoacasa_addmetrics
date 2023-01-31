@@ -25,7 +25,8 @@ def is_skippable(key):
         'version',
         'tossedPacketsEnergy',
         'colibri2',
-        'drain'
+        'drain',
+        'healthy'
     ]
     return True if key in skippable_keys else False
 
